@@ -25,238 +25,185 @@ O diagrama de classes a seguir ilustra a estrutura e os relacionamentos entre os
 
 ```mermaid
 classDiagram
-    main <|-- iPhone
-    main <|-- iPhoneMenu
-    iPhoneMenu <|-- iPhone
-    iPhoneMenu <|-- Music
-    iPhoneMenu <|-- Video
-    iPhoneMenu <|-- Contact
-    iPhoneMenu <|-- WebPage
-    iPhone <|-- ReprodutorMusicalImpl
-    iPhone <|-- VideoPlayerImpl
-    iPhone <|-- AparelhoTelefonicoImpl
-    iPhone <|-- NavegadorInternetImpl
-    iPhone <|-- ReprodutorMusical
-    iPhone <|-- VideoPlayer
-    iPhone <|-- AparelhoTelefonico
-    iPhone <|-- NavegadorInternet
-    ReprodutorMusical <|-- Music
-    VideoPlayer <|-- Video
-    AparelhoTelefonico <|-- Contact
-    NavegadorInternet <|-- WebPage
-    
+    direction LR
+
+    %% RELACIONAMENTOS PRINCIPAIS
+    main ..> iphoneMenu : inicia
+    iphoneMenu ..> IPhone : controla
+
+    IPhone "1" *-- "1" ReprodutorMusicalImpl : possui
+    IPhone "1" *-- "1" VideoPlayerImpl : possui
+    IPhone "1" *-- "1" AparelhoTelefonicoImpl : possui
+    IPhone "1" *-- "1" NavegadorInternetImpl : possui
+
+    ReprodutorMusicalImpl ..|> ReprodutorMusical : implementa
+    VideoPlayerImpl ..|> VideoPlayer : implementa
+    AparelhoTelefonicoImpl ..|> AparelhoTelefonico : implementa
+    NavegadorInternetImpl ..|> NavegadorInternet : implementa
+
+    ReprodutorMusicalImpl "1" o-- "*" Music : gerencia
+    VideoPlayerImpl "1" o-- "*" Video : gerencia
+    AparelhoTelefonicoImpl "1" o-- "*" Contact : gerencia
+    NavegadorInternetImpl "1" o-- "*" WebPage : gerencia
+
+    AparelhoTelefonicoImpl ..> TelefoneException : lança
+    NavegadorInternetImpl ..> NavegadorException : lança
+    ReprodutorMusicalImpl ..> MusicaException : lança
+
+    %% DEFINIÇÃO DAS CLASSES E INTERFACES
+
     class main {
-    	<<Import>>
-    	# device.iPhone : class
-    	# menu.iPhoneMenu: class
-    	<<Operations>>
-    	+ main()
+        +main(String[] args) void
     }
-    class iPhoneMenu {
-    	<<Import>>
-    	# models.Music : record
-    	# models.Video : record
-    	# models.Contact : record
-    	# models.WebPage : record
-    	# device.iPhone : record
-    	<<Attributes>>
-    	- iphoneInstance : iPhone
-    	- Alerta : String
-    	<<Operations>>
-    	+ setIphoneInstace()
-    	+ displayMusicMenu()
-    	+ displayVideoMenu()
-    	+ displayPhoneMenu()
-    	+ displayInternetMenu()
+
+    class iphoneMenu {
+        - iphoneInstance : IPhone
+        - Alerta : String
+        + iphoneMenu()
+        + displayMainMenu() void
+        + displayMusicMenu() void
+        + displayVideoMenu() void
+        + displayPhoneMenu() void
+        + displayInternetMenu() void
     }
-    class iPhone {
-    	<<Import>>
-    	# components.ReprodutorMusicalImpl : class
-    	# components.VideoPlayerImpl : class
-    	# components.AparelhotelefonicoImpl : class
-    	# components.NavegadorInterntImpl : class
-    	# interfaces.ReprodutorMusical : interfaces
-    	# interfaces.VideoPlayer : interfaces
-    	# interfaces.AparelhoTelefonico : interfaces
-    	# interfaces.Navegador : interfaces
-    	<<Attributes>>
-    	- reprodutorMusical : ReprodutorMusicalImpl
-    	- videoPlayer : VideoPlayerImpl
-    	- aparelhoTelefonico : AparelhoTelefonicoImpl
-    	- navegadorInternet : NavegadorInternetImpl
-    	<<Operations>>
-    	+ Iphone()
-    	+ getReprodutorMusical()
-    	+ getVideoPlayer()
-    	+ getAparelhoTelefonico()
-    	+ getNavegadorInternet()
+
+    class IPhone {
+        - reprodutorMusical : ReprodutorMusicalImpl
+        - videoPlayer : VideoPlayerImpl
+        - aparelhoTelefonico : AparelhoTelefonicoImpl
+        - navegadorInternet : NavegadorInternetImpl
+        + IPhone()
+        + getReprodutorMusical() : ReprodutorMusical
+        + getVideoPlayer() : VideoPlayer
+        + getAparelhoTelefonico() : AparelhoTelefonico
+        + getNavegadorInternet() : NavegadorInternet
     }
+
     class Music {
-    	<<Attributes>>
-    	- title : String
-    	- artist : String
-    	<<Operations>>
-    	+ getFullTitle()
+        - title : String
+        - artist : String
+        - duration : String
+        + Music(String title, String artist, String duration)
+        + getFullTitle() : String
     }
+
     class Video {
-    	<<Attributes>>
-    	- title : String
-    	- director : String
-    	<<Operations>>
-    	+ getFullTitle()
+        - title : String
+        - director : String
+        - duration : String
+        + Video(String title, String director, String duration)
+        + getFullTitle() : String
     }
+
     class Contact {
-    	<<Attributes>>
-    	- name : String
-    	- phoneNumber : String
+        - name : String
+        - phoneNumber : String
+        + Contact(String name, String phoneNumber)
     }
+
     class WebPage {
-    	<<Attributes>>
-    	- url : String
-    	- content : String
-    	<<Operations>>
-    	+ equals() : boolean
-    	+ hashCode() : Int
+        - url : String
+        - content : String
+        + WebPage(String url, String content)
+        + equals(Object o) : boolean
+        + hashCode() : int
     }
-    class ReprodutorMusical {
-    	<<Import>>
-    	# models.Music : record
-    	<<Operations>>
-    	+ SelectMusic()
-    	+ playMusic()
-    	+ pauseMusic() : String
-    	+ stopMusic() : String
-    	+ nextSong() : String
-    	+ previusSong() : String
-    	+ getCurrentSong() : String
-    	+ getPlaylist() : List(Music)
+
+    interface ReprodutorMusical {
+        + playMusic(String title) String
+        + pauseMusic() String
+        + selectNextMusic() String
+        + selectPreviousMusic() String
     }
-    class VideoPlay {
-    	<<Import>>
-    	# models.Video : record
-    	<<Operations>>
-    	+ SelectVideo()
-    	+ playVideo()
-    	+ pauseVideo() : String
-    	+ stopVideo() : String
-    	+ nextVideo() : String
-    	+ previusVideo() : String
-    	+ getCurrentVideo() : String
-    	+ getPlaylist() : List(Video)
+
+    interface VideoPlayer {
+        + playVideo(String title) String
+        + pauseVideo() String
+        + selectNextVideo() String
+        + selectPreviousVideo() String
     }
-    class AparelhoTelefonico {
-    	<<Import>>
-    	# models.Contact : record
-    	<<Operations>>
-    	+ selectContact() : String
-    	+ makeCall() : String
-    	+ receiveCall() : String
-    	+ endCall() : String
-    	+ sendMessageVoice() : String
-    	+ receiveMessageVoice() : String
-    	+ getContatoAtual(): String
-    	+ isOnCall() : boolean
-    	+ getContatcs() : Map(String, Contact)
+
+    interface AparelhoTelefonico {
+        + makeCall(String phoneNumber) String
+        + receiveCall(String phoneNumber) String
+        + endCall() String
+        + sendMessageVoice(String recipient, String message) String
+        + getContact(String name) Contact
+        + isOnCall() : boolean
     }
-    class NavegadorInternet {
-    	<<Operations>>
-    	+ viewPage()
-    	+ addNewTab()
-    	+ closetab() : String
-    	+ RefreshPage() : String
-    	+ goBack() : String
-    	+ getCurrentPage() : String
-    	+ getNumberOfTabs() : int
+
+    interface NavegadorInternet {
+        + viewPage(String url) void
+        + RefreshPage() String
+        + goBack() String
+        + closeTab() String
+        + addNewTab(String url) void
+        + getCurrentPage() String
+        + getNumberOfTabs() int
     }
-    class ReprodutorMusicaImpl {
-    	<<Import>>
-    	# interfaces.ReprodutorMusical : interfaces
-    	# models.Music : record
-    	<<Attributes>>
-    	- musicaAtual : Music
-    	- isPlaying : boolean
-    	- playlist : List(Music)
-    	<<Operations>>
-    	+ ReprodutorMusicalImpl()
-    	+ SelectMusic()
-    	+ playMusic()
-    	+ pauseMusic() : String
-    	+ stopMusic() : String
-    	+ nextSong() : String
-    	+ previusSong() : String
-    	+ getCurrentSong() : String
-    	+ getPlaylist() : List(Music)
+
+    class ReprodutorMusicalImpl {
+        - currentMusic : Music
+        - isPlaying : boolean
+        - playlist : List~Music~
+        + ReprodutorMusicalImpl()
+        + playMusic(String title) String
+        + pauseMusic() String
+        + selectNextMusic() String
+        + selectPreviousMusic() String
     }
+
     class VideoPlayerImpl {
-    	<<Import>>
-    	# interfaces.VideoPlayer : interfaces
-    	# models.Video : record
-    	<<Attributes>>
-    	- currentVideo : Video
-    	- isPlaying : boolean
-    	- videoPlaylist : List(Video)
-    	<<Operations>>
-    	+ VideoPlayerImpl()
-    	+ SelectVideo()
-    	+ playVideo()
-    	+ pauseVideo() : String
-    	+ stopVideo() : String
-    	+ nextVideo() : String
-    	+ previusVideo() : String
-    	+ getCurrentVideo() : String
-    	+ getPlaylist() : List(Video)
+        - currentVideo : Video
+        - isPlaying : boolean
+        - videoPlaylist : List~Video~
+        + VideoPlayerImpl()
+        + playVideo(String title) String
+        + pauseVideo() String
+        + selectNextVideo() String
+        + selectPreviousVideo() String
     }
+
     class AparelhoTelefonicoImpl {
-    	<<Import>>
-    	# interfaces.AparelhoTelefonico : interfaces
-    	# models.Contact : record
-    	# exceptions.ChamadaException : class
-    	<<Attributes>>
-    	- currentContact : Contact
-    	- isOnCall : boolean
-    	- contacts : Map(String, Contact)
-    	- currentMessage : String
-    	<<Operations>>
-    	+ AparelhoTelefonicoImpl()
-    	+ selectContact() : String
-    	+ makeCall() : String
-    	+ receiveCall() : String
-    	+ endCall() : String
-    	+ sendMessageVoice() : String
-    	+ receiveMessageVoice() : String
-    	+ getContatoAtual(): String
-    	+ isOnCall() : boolean
-    	+ getContatcs() : Map(String, Contact)
+        - currentContact : Contact
+        - isOnCall : boolean
+        - contacts : Map~String, Contact~
+        + AparelhoTelefonicoImpl()
+        + makeCall(String phoneNumber) String
+        + receiveCall(String phoneNumber) String
+        + endCall() String
+        + sendMessageVoice(String recipient, String message) String
+        + getContact(String name) Contact
+        + isOnCall() : boolean
     }
+
     class NavegadorInternetImpl {
-    	<<Import>>
-    	# interfaces.NavegadorInternet : interfaces
-    	# models.WebPage : record
-    	# exception.NavegadorException : class
-    	<<Attributes>>
-    	- currentPage : WebPage
-    	- openTabs : List(WebPage)
-    	- history : Stack(WebPage)
-    	<<Operations>>
-    	+ NavegadorInternetImpl()
-    	+ viewPage()
-    	+ addNewTab()
-    	+ closetab() : String
-    	+ RefreshPage() : String
-    	+ goBack() : String
-    	+ getCurrentPage() : String
-    	+ getNumberOfTabs() : int
+        - currentPage : WebPage
+        - openTabs : List~WebPage~
+        - history : Stack~WebPage~
+        + NavegadorInternetImpl()
+        + viewPage(String url) void
+        + addNewTab(String url) void
+        + closeTab() String
+        + RefreshPage() String
+        + goBack() String
+        + getCurrentPage() String
+        + getNumberOfTabs() int
     }
-    class ChamadaException {
-    	<<Extend>>
-    	# RuntimeException
-    	<<Operations>>
-    	+ ChamadaException()
+
+    class MusicaException {
+        + MusicaException(String message)
     }
+
+    class TelefoneException {
+        + TelefoneException(String message)
+    }
+
     class NavegadorException {
-    	<<Extend>>
-    	# RuntimeException
-    	<<Operations>>
-    	+ NavegadorException()
+        + NavegadorException(String message)
     }
+
+    MusicaException --|> RuntimeException
+    TelefoneException --|> RuntimeException
+    NavegadorException --|> RuntimeException
 ```
