@@ -1,7 +1,6 @@
 package components;
 
 import interfaces.VideoPlayer;
-import models.Music;
 import models.Video;
 
 import java.util.List;

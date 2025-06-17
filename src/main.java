@@ -1,10 +1,6 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import components.AparelhoTelefonicoImpl;
-import components.NavegadorInternetImpl;
-import components.ReprodutorMusicalImpl;
-import components.VideoPlayerImpl;
 import device.iPhone;
 import menu.iphoneMenu;
 
