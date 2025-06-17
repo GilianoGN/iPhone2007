@@ -25,42 +25,238 @@ O diagrama de classes a seguir ilustra a estrutura e os relacionamentos entre os
 
 ```mermaid
 classDiagram
+    main <|-- iPhone
+    main <|-- iPhoneMenu
+    iPhoneMenu <|-- iPhone
+    iPhoneMenu <|-- Music
+    iPhoneMenu <|-- Video
+    iPhoneMenu <|-- Contact
+    iPhoneMenu <|-- WebPage
+    iPhone <|-- ReprodutorMusicalImpl
+    iPhone <|-- VideoPlayerImpl
+    iPhone <|-- AparelhoTelefonicoImpl
+    iPhone <|-- NavegadorInternetImpl
+    iPhone <|-- ReprodutorMusical
+    iPhone <|-- VideoPlayer
+    iPhone <|-- AparelhoTelefonico
+    iPhone <|-- NavegadorInternet
+    ReprodutorMusical <|-- Music
+    VideoPlayer <|-- Video
+    AparelhoTelefonico <|-- Contact
+    NavegadorInternet <|-- WebPage
+    
     class main {
-        - device.iPhone : class
-        - menu.iPhoneMenu: class
-        - main[]
+    	<<Import>>
+    	# device.iPhone : class
+    	# menu.iPhoneMenu: class
+    	<<Operations>>
+    	+ main()
     }
     class iPhoneMenu {
-        - models.Music : record
-        - models.Video : record
-        - models.Contact : record
-        - models.WebPage : record
-        - device.iPhone : record
-        - iphoneInstance : iPhone
-        - Alerta : String
-        - setIphoneInstace[]
-        - displayMusicMenu[]
-        - displayVideoMenu[]
-        - displayPhoneMenu[]
-        - displayInternetMenu[]
+    	<<Import>>
+    	# models.Music : record
+    	# models.Video : record
+    	# models.Contact : record
+    	# models.WebPage : record
+    	# device.iPhone : record
+    	<<Attributes>>
+    	- iphoneInstance : iPhone
+    	- Alerta : String
+    	<<Operations>>
+    	+ setIphoneInstace()
+    	+ displayMusicMenu()
+    	+ displayVideoMenu()
+    	+ displayPhoneMenu()
+    	+ displayInternetMenu()
     }
     class iPhone {
-        - components.ReprodutorMusicalImpl : class
-        - components.VideoPlayerImpl : class
-        - components.AparelhotelefonicoImpl : class
-        - components.NavegadorInterntImpl : class
-        - interfaces.ReprodutorMusical : interfaces
-        - interfaces.VideoPlayer : interfaces
-        - interfaces.AparelhoTelefonico : interfaces
-        - interfaces.Navegador : interfaces
-        - reprodutorMusical : ReprodutorMusicalImpl
-        - videoPlayer : VideoPlayerImpl
-        - aparelhoTelefonico : AparelhoTelefonicoImpl
-        - navegadorInternet : NavegadorInternetImpl
-        - Iphone[]
-        - getReprodutorMusical[]
-        - getVideoPlayer[]
-        - getAparelhoTelefonico[]
-        - getNavegadorInternet[]
+    	<<Import>>
+    	# components.ReprodutorMusicalImpl : class
+    	# components.VideoPlayerImpl : class
+    	# components.AparelhotelefonicoImpl : class
+    	# components.NavegadorInterntImpl : class
+    	# interfaces.ReprodutorMusical : interfaces
+    	# interfaces.VideoPlayer : interfaces
+    	# interfaces.AparelhoTelefonico : interfaces
+    	# interfaces.Navegador : interfaces
+    	<<Attributes>>
+    	- reprodutorMusical : ReprodutorMusicalImpl
+    	- videoPlayer : VideoPlayerImpl
+    	- aparelhoTelefonico : AparelhoTelefonicoImpl
+    	- navegadorInternet : NavegadorInternetImpl
+    	<<Operations>>
+    	+ Iphone()
+    	+ getReprodutorMusical()
+    	+ getVideoPlayer()
+    	+ getAparelhoTelefonico()
+    	+ getNavegadorInternet()
+    }
+    class Music {
+    	<<Attributes>>
+    	- title : String
+    	- artist : String
+    	<<Operations>>
+    	+ getFullTitle()
+    }
+    class Video {
+    	<<Attributes>>
+    	- title : String
+    	- director : String
+    	<<Operations>>
+    	+ getFullTitle()
+    }
+    class Contact {
+    	<<Attributes>>
+    	- name : String
+    	- phoneNumber : String
+    }
+    class WebPage {
+    	<<Attributes>>
+    	- url : String
+    	- content : String
+    	<<Operations>>
+    	+ equals() : boolean
+    	+ hashCode() : Int
+    }
+    class ReprodutorMusical {
+    	<<Import>>
+    	# models.Music : record
+    	<<Operations>>
+    	+ SelectMusic()
+    	+ playMusic()
+    	+ pauseMusic() : String
+    	+ stopMusic() : String
+    	+ nextSong() : String
+    	+ previusSong() : String
+    	+ getCurrentSong() : String
+    	+ getPlaylist() : List(Music)
+    }
+    class VideoPlay {
+    	<<Import>>
+    	# models.Video : record
+    	<<Operations>>
+    	+ SelectVideo()
+    	+ playVideo()
+    	+ pauseVideo() : String
+    	+ stopVideo() : String
+    	+ nextVideo() : String
+    	+ previusVideo() : String
+    	+ getCurrentVideo() : String
+    	+ getPlaylist() : List(Video)
+    }
+    class AparelhoTelefonico {
+    	<<Import>>
+    	# models.Contact : record
+    	<<Operations>>
+    	+ selectContact() : String
+    	+ makeCall() : String
+    	+ receiveCall() : String
+    	+ endCall() : String
+    	+ sendMessageVoice() : String
+    	+ receiveMessageVoice() : String
+    	+ getContatoAtual(): String
+    	+ isOnCall() : boolean
+    	+ getContatcs() : Map(String, Contact)
+    }
+    class NavegadorInternet {
+    	<<Operations>>
+    	+ viewPage()
+    	+ addNewTab()
+    	+ closetab() : String
+    	+ RefreshPage() : String
+    	+ goBack() : String
+    	+ getCurrentPage() : String
+    	+ getNumberOfTabs() : int
+    }
+    class ReprodutorMusicaImpl {
+    	<<Import>>
+    	# interfaces.ReprodutorMusical : interfaces
+    	# models.Music : record
+    	<<Attributes>>
+    	- musicaAtual : Music
+    	- isPlaying : boolean
+    	- playlist : List(Music)
+    	<<Operations>>
+    	+ ReprodutorMusicalImpl()
+    	+ SelectMusic()
+    	+ playMusic()
+    	+ pauseMusic() : String
+    	+ stopMusic() : String
+    	+ nextSong() : String
+    	+ previusSong() : String
+    	+ getCurrentSong() : String
+    	+ getPlaylist() : List(Music)
+    }
+    class VideoPlayerImpl {
+    	<<Import>>
+    	# interfaces.VideoPlayer : interfaces
+    	# models.Video : record
+    	<<Attributes>>
+    	- currentVideo : Video
+    	- isPlaying : boolean
+    	- videoPlaylist : List(Video)
+    	<<Operations>>
+    	+ VideoPlayerImpl()
+    	+ SelectVideo()
+    	+ playVideo()
+    	+ pauseVideo() : String
+    	+ stopVideo() : String
+    	+ nextVideo() : String
+    	+ previusVideo() : String
+    	+ getCurrentVideo() : String
+    	+ getPlaylist() : List(Video)
+    }
+    class AparelhoTelefonicoImpl {
+    	<<Import>>
+    	# interfaces.AparelhoTelefonico : interfaces
+    	# models.Contact : record
+    	# exceptions.ChamadaException : class
+    	<<Attributes>>
+    	- currentContact : Contact
+    	- isOnCall : boolean
+    	- contacts : Map(String, Contact)
+    	- currentMessage : String
+    	<<Operations>>
+    	+ AparelhoTelefonicoImpl()
+    	+ selectContact() : String
+    	+ makeCall() : String
+    	+ receiveCall() : String
+    	+ endCall() : String
+    	+ sendMessageVoice() : String
+    	+ receiveMessageVoice() : String
+    	+ getContatoAtual(): String
+    	+ isOnCall() : boolean
+    	+ getContatcs() : Map(String, Contact)
+    }
+    class NavegadorInternetImpl {
+    	<<Import>>
+    	# interfaces.NavegadorInternet : interfaces
+    	# models.WebPage : record
+    	# exception.NavegadorException : class
+    	<<Attributes>>
+    	- currentPage : WebPage
+    	- openTabs : List(WebPage)
+    	- history : Stack(WebPage)
+    	<<Operations>>
+    	+ NavegadorInternetImpl()
+    	+ viewPage()
+    	+ addNewTab()
+    	+ closetab() : String
+    	+ RefreshPage() : String
+    	+ goBack() : String
+    	+ getCurrentPage() : String
+    	+ getNumberOfTabs() : int
+    }
+    class ChamadaException {
+    	<<Extend>>
+    	# RuntimeException
+    	<<Operations>>
+    	+ ChamadaException()
+    }
+    class NavegadorException {
+    	<<Extend>>
+    	# RuntimeException
+    	<<Operations>>
+    	+ NavegadorException()
     }
 ```
