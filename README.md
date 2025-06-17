@@ -109,21 +109,21 @@ classDiagram
         + hashCode() : int
     }
 
-    interface ReprodutorMusical {
+    class ReprodutorMusical {
         + playMusic(String title) String
         + pauseMusic() String
         + selectNextMusic() String
         + selectPreviousMusic() String
     }
 
-    interface VideoPlayer {
+    class VideoPlayer {
         + playVideo(String title) String
         + pauseVideo() String
         + selectNextVideo() String
         + selectPreviousVideo() String
     }
 
-    interface AparelhoTelefonico {
+    class AparelhoTelefonico {
         + makeCall(String phoneNumber) String
         + receiveCall(String phoneNumber) String
         + endCall() String
@@ -132,7 +132,7 @@ classDiagram
         + isOnCall() : boolean
     }
 
-    interface NavegadorInternet {
+    class NavegadorInternet {
         + viewPage(String url) void
         + RefreshPage() String
         + goBack() String
